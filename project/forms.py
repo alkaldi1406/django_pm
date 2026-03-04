@@ -12,3 +12,16 @@ class ProjectCreateForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'rows':5, 'cols':20}),
 
         }
+
+
+
+
+class ProjectUpdateForm(forms.ModelForm):
+    class Meta:
+        model = models.Project
+        fields = ['category', 'title', 'status']
+        widgets = {
+            'category': forms.Select(attrs={'class':'form-control'}),
+            'title': forms.TextInput(attrs={'class':'form-control'}),
+            'status': forms.Select(attrs={'class':'form-control'}),
+        }

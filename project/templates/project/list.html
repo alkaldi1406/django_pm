@@ -4,7 +4,11 @@
     <h3>{% trans 'My Project'%}</h3>
     <ul>
         {% for project in object_list %}
-            {{ project.title }}
+            <li>
+                {{ project.title }}
+                <a href="{% url 'project_update' project.id %}">Update</a>
+                <a href="{% url 'project_delete' project.id %}">Delete</a>
+            </li>
         {% empty %}
             <li>{% trans ' the are no project to show..'%}</li>
         {%endfor%}
