@@ -1,16 +1,128 @@
+{% extends 'base.html'%}
 {% load i18n %}
-
+{% load humanize%}
 {% block content %}
-    <h3>{% trans 'My Project'%}</h3>
-    <ul>
+    <div class="d-flex">
+        <h3 class="me-auto">{% trans 'My Projects'%}</h3>
+        <div>
+            <a href="{% url 'project_create' %}" class="btn btn-outline-success">
+                <i class="bi bi-plus-lg"></i>{% trans 'New Project'%}
+            </a>
+        </div>
+    </div>
+    <div class="row my-4">
         {% for project in object_list %}
-            <li>
-                {{ project.title }}
-                <a href="{% url 'project_update' project.id %}">Update</a>
-                <a href="{% url 'project_delete' project.id %}">Delete</a>
-            </li>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p>
+                            <span class="badge rounded-pill bg-dark">
+                                {{project.get_status_display}}
+                            </span>
+                        </p>
+                        <h3 class="card-title fs-6">{{project.title}}</h3>
+                        <p class="card-text text-muted small">{{project.description}}</p>
+                        <div class="d-flex">
+                            <span class="me-auto text-muted small">
+                                <i class="bi bi-calendar-event"></i>
+                                <i class="bi bi-clock"></i>
+                                <time datetime="{{project.created_at}}">
+                                    {{project.created_at|naturaltime}}
+                                </time>
+                            </span>
+                            <a href="{% url 'project_update' project.id %}" class="btn btn-sm btn-outline-dark mx-1">
+                                {% trans 'Edit'%}
+                            </a>
+                            <a href="{% url 'project_delete' project.id %}" class="btn btn-sm btn-outline-danger mx-1">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% empty %}
-            <li>{% trans ' the are no project to show..'%}</li>
-        {%endfor%}
-    </ul>
+            <div class="col-md-12">
+                <div class="h-100 p-5 bg-white border rounded-3 text-center">
+                    {% trans 'There are No projects yet'%}
+                <p>
+                    <i class="bi bi-emoji-frown fs-1"></i>
+                </p>
+                <a href="{% url 'project_create' %}" class="btn btn-success">
+                    <i class="bi bi-plus-lg"></i>{% trans 'New Project'%}
+                 </a>
+                </div>
+            </div>
+        {% endfor%}
+                <!-- pagination.html -->
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation">
+              <ul class="pagination justify-content-center ">
+
+                {# زر الأولى #}
+                {% if page_obj.number > 2 %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                      الأولى
+                    </a>
+                  </li>
+                {% endif %}
+
+                {# زر السابق #}
+                {% if page_obj.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                      Previous
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                  </li>
+                {% endif %}
+
+                {# أرقام الصفحات #}
+                {% for num in page_obj.paginator.page_range %}
+                  {% if page_obj.number == num %}
+                    <li class="page-item active">
+                      <span class="page-link">{{ num }}</span>
+                    </li>
+                  {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+
+                {# زر التالي #}
+                {% if page_obj.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                      Next
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                  </li>
+                {% endif %}
+
+                {# زر الأخيرة #}
+                {% if page_obj.number < page_obj.paginator.num_pages|add:'-1' %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                      الأخيرة
+                    </a>
+                  </li>
+                {% endif %}
+
+              </ul>
+            </nav>
+
+            {# معلومات الصفحات #}
+            <div class="text-center text-muted small mt-2">
+              page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+              ({{ page_obj.paginator.count }} item)
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

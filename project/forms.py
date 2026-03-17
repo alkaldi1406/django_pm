@@ -9,7 +9,7 @@ class ProjectCreateForm(forms.ModelForm):
         widgets = {
             'category': forms.Select(attrs={'class':'form-control'}),
             'title': forms.TextInput(attrs={'class':'form-control'}),
-            'description': forms.Textarea(attrs={'rows':5, 'cols':20}),
+            'description': forms.Textarea(attrs={'class':'form-control'}),
 
         }
 
