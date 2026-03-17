@@ -10,11 +10,12 @@
             </a>
         </div>
     </div>
-    <div class="row my-4">
+
+    <div class="row my-4 g-4"> <!-- أضفنا g-4 للمسافات المتساوية -->
         {% for project in object_list %}
-            <div class="col-md-4">
-                <div class="card mb-3">
-                    <div class="card-body">
+            <div class="col-md-4 d-flex"> <!-- أضفنا d-flex هنا -->
+                <div class="card mb-3 w-100 shadow-sm"> <!-- أضفنا w-100 ليمتد الكرت -->
+                    <div class="card-body d-flex flex-column"> <!-- flex-column لترتيب المحتوى عمودياً -->
                         <p>
                             <span class="badge rounded-pill
                                 {% if project.status == 2 %} bg-success
@@ -25,22 +26,27 @@
                                 {{ project.get_status_display }}
                             </span>
                         </p>
-                        <h3 class="card-title fs-6">{{project.title}}</h3>
-                        <p class="card-text text-muted small">{{project.description}}</p>
-                        <div class="d-flex">
+                        <h3 class="card-title fs-6 fw-bold">{{ project.title }}</h3>
+
+                        <!-- تعديل الوصف ليكون بطول ثابت مع قص النص الزائد -->
+                        <p class="card-text text-muted small flex-grow-1"
+                           style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
+                            {{ project.description }}
+                        </p>
+
+                        <div class="d-flex align-items-center mt-3 pt-2 border-top">
                             <span class="me-auto text-muted small">
-                                <i class="bi bi-calendar-event"></i>
-                                <i class="bi bi-clock"></i>
-                                <time datetime="{{project.created_at}}">
-                                    {{project.created_at|naturaltime}}
-                                </time>
+                                <i class="bi bi-clock me-1"></i>
+                                {{ project.created_at|naturaltime }}
                             </span>
-                            <a href="{% url 'project_update' project.id %}" class="btn btn-sm btn-outline-dark mx-1">
-                                {% trans 'Edit'%}
-                            </a>
-                            <a href="{% url 'project_delete' project.id %}" class="btn btn-sm btn-outline-danger mx-1">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            <div class="btn-group">
+                                <a href="{% url 'project_update' project.id %}" class="btn btn-sm btn-outline-dark">
+                                    {% trans 'Edit' %}
+                                </a>
+                                <a href="{% url 'project_delete' project.id %}" class="btn btn-sm btn-outline-danger ms-1">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
