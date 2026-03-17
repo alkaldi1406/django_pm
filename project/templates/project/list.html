@@ -16,8 +16,13 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <p>
-                            <span class="badge rounded-pill bg-dark">
-                                {{project.get_status_display}}
+                            <span class="badge rounded-pill
+                                {% if project.status == 2 %} bg-success
+                                {% elif project.status == 1 %} bg-warning text-dark
+                                {% elif project.status == 3 %} bg-info
+                                {% elif project.status == 4 %} bg-danger
+                                {% else %} bg-secondary {% endif %}">
+                                {{ project.get_status_display }}
                             </span>
                         </p>
                         <h3 class="card-title fs-6">{{project.title}}</h3>

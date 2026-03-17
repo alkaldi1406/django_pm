@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
@@ -7,7 +8,7 @@ from . import forms
 
 # Create your views here.
 
-class ProjectListView(ListView):
+class ProjectListView(LoginRequiredMixin,ListView):
     model = models.Project
     template_name = 'project/list.html'
     paginate_by = 6
@@ -22,7 +23,7 @@ class ProjectListView(ListView):
         return queryset
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(LoginRequiredMixin,CreateView):
     model = models.Project
     form_class = forms.ProjectCreateForm
     template_name = 'project/create.html'
@@ -30,7 +31,7 @@ class ProjectCreateView(CreateView):
 
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(LoginRequiredMixin,UpdateView):
     model = models.Project
     form_class = forms.ProjectUpdateForm
     template_name = 'project/update.html'
@@ -40,7 +41,7 @@ class ProjectUpdateView(UpdateView):
         return reverse('project_update', kwargs={'pk': self.object.pk})
 
 
-class ProjectDeleteView(DeleteView):
+class ProjectDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Project
     template_name = 'project/delete.html'
     success_url = reverse_lazy('project_list')
@@ -49,7 +50,7 @@ class ProjectDeleteView(DeleteView):
 
 
 
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin,CreateView):
     model = models.Task
     fields = ['description','project']
     http_method_names = ['post']
@@ -59,7 +60,7 @@ class TaskCreateView(CreateView):
         return reverse('project_update', kwargs={'pk': self.object.project.pk})
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(LoginRequiredMixin,UpdateView):
     model = models.Task
     fields = ['is_completed']
     http_method_names = ['post']
@@ -70,7 +71,7 @@ class TaskUpdateView(UpdateView):
 
 
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Task
 
 
