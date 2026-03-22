@@ -7,6 +7,11 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
 
 
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Category')
+
+
     def __str__(self):
         return self.name
 
@@ -29,17 +34,29 @@ class Project(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
 
 
+    class Meta:
+        verbose_name = _('Project')
+        verbose_name_plural = _('Project')
+        ordering = ['-created_at']
+
+
+
     def __str__(self):
         return self.title
 
-    class Meta:
-        ordering = ['-created_at']
 
 
 class Task(models.Model):
     description = models.TextField()
     is_completed = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+
+    class Meta:
+        verbose_name = _('Task')
+        verbose_name_plural = _('Task')
+
+
 
     def __str__(self):
         return self.description
